@@ -6,7 +6,13 @@ from util.common import zoom_endpoint, zoom_token
 def PostAlertZoom(data):
     alert_message = data["message"]
     alert_title = data["title"]
-    alert_color = dict(alerting = "#e49137", nodata = "#3c78d8", error = "#cc0001")
+    alert_color = dict(alerting = "#e49137", nodata = "#3c78d8", error = "#cc0001", ok = "#69a84f")
+    if data["state"] in alert_color:
+        sidebar_color = alert_color[data["state"]]
+    else: 
+        sidebar_color = "#3c78d8"
+        print(data["state"])
+    
     zoom_message_headers = {'Authorization' : 'Bearer {}'.format(zoom_token)}
     zoom_send_msg_payload = {
     "head": {
@@ -16,7 +22,7 @@ def PostAlertZoom(data):
     "body": [
         {
         "type": "section",
-        "sidebar_color": "{}".format(alert_color[data["state"]]),
+        "sidebar_color": "{}".format(sidebar_color),
         "sections": [
             {
             "type": "message",
